@@ -1,10 +1,20 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title>Todo List</title>
-  </head>
-  <body>
-    <h1>It's a <%= kindOfDay %>, Enjoy life..</h1>
-  </body>
-</html>
+
+<%- include("header") -%>
+<div class="box" id="heading">
+  <h1><%= ListTitle %></h1>
+</div>
+
+<div class="box">
+  <% for(i=0; i<newListItems.length; i++){ %>
+  <div class="item">
+    <input type="checkbox">
+    <p><%= newListItems[i]  %></p>
+  </div>
+  <% } %>
+
+  <form action="/" method="post" class="item">
+    <input type="text" name="newItem" placeholder="new Item" autocomplete="off">
+    <button type="submit" name="addButton" value=<%=ListTitle %>>+</button>
+  </form>
+</div>
+<%- include("footer") -%>

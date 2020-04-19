@@ -1,37 +1,39 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const date = require(__dirname + "/date.js");
 
 const app = express();
-
+app.use(bodyParser.urlencoded({extended:true}));
 app.set('view engine', 'ejs');
+app.use(express.static("public"));
+
+const items = ["Buy Grocery", "Cook fish", "Cook some rice"];
+const workItems = [];
 
 app.get("/", function(req,res){
+  const day = date.getDay();
+  res.render("lists",{ListTitle:day, newListItems:items});
+})
 
+app.post("/", function(req,resp){
+  const item = req.body.newItem;
+  const listName = req.body.addButton;
 
-  var today = new Date();
-  var currentDay = today.getDay();
-  var day = "";
-
-  switch (currentDay) {
-    case 0: day = "weekEnd";
-      break;
-    case 1: day = "WeekDay";
-      break;
-    case 2: day = "WeekDay";
-      break;
-    case 3: day = "WeekDay";
-      break;
-    case 4: day = "WeekDay";
-      break;
-    case 5: day = "WeekDay";
-      break;
-    case 6: day = "weekEnd";
-      break;
-    default: console.log("unknown day..");
-
+  if(listName === "Work"){
+    workItems.push(item);
+    resp.redirect("/work");
+  }else{
+    items.push(item);
+    resp.redirect("/");
   }
+})
 
-  res.render("lists",{kindOfDay:day});
+app.get("/work", function(req, resp){
+  resp.render("lists",{ListTitle:"Work", newListItems:workItems});
+})
+
+app.get("/about", function(req, resp){
+  resp.render("about");
 })
 
 app.listen(3000,function(){
